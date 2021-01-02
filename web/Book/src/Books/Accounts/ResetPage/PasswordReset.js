@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Logo from '../../../Assets/logo.svg'
 import { changePassword } from '../../../Store/Action/auth';
 import { connect } from 'react-redux';
-import { withRouter, Redirect } from "react-router";
+import { withRouter } from "react-router";
 import { message } from 'antd';
 
 // Success Messge Box
@@ -31,7 +31,6 @@ export class PasswordReset extends Component {
 
     //  Recieves new props. Primarily used for Error Handling
     componentWillReceiveProps(nextProps){
-        console.log(nextProps.reset)
         if(nextProps.error !== undefined){
             if(nextProps.error.message === 'Network Error'){
                 error(nextProps.error.message)

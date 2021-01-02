@@ -4,12 +4,14 @@ import { renderRoutes } from 'react-router-config';
 import { GiHamburgerMenu } from "react-icons/gi";
 import { connect } from 'react-redux';
 import { logout, loadUser } from '../../Store/Action/auth';
+import { HomeFilled } from '@ant-design/icons';
 
 export class Dashboard extends Component {
 
     //  Holds the State
     state={
-        toogle: true
+        toogle: true,
+        profile_img: ''
     }
 
     //  Constructor
@@ -26,8 +28,21 @@ export class Dashboard extends Component {
 
     //  Handle Logout
     handleLogout(){
-        console.log('logging out')
         this.props.logout()
+    }
+
+    //  Fired when New Props are recieved
+    componentWillReceiveProps(nextProps){
+        this.setState({ 
+            profile_img: nextProps.auth?nextProps.auth.user.profile_img:"https://firebasestorage.googleapis.com/v0/b/nextbooks-1a9f0.appspot.com/o/Profile%2Funnamed.jpg?alt=media&token=26aa8e12-b869-4a2f-afde-ced8ebe2bf0e",
+         })
+    }
+
+    //  Fired when the component mounts
+    componentDidMount(){
+        this.setState({ 
+            profile_img: this.props.auth?this.props.auth.user.profile_img:"https://firebasestorage.googleapis.com/v0/b/nextbooks-1a9f0.appspot.com/o/Profile%2Funnamed.jpg?alt=media&token=26aa8e12-b869-4a2f-afde-ced8ebe2bf0e",
+         })
     }
 
     render() {
@@ -35,9 +50,9 @@ export class Dashboard extends Component {
             this.props.history.push('/auth/login')
         }
         return (
-          <div className={`${this.state.toogle?"":"enlarge-menu"}`}>
+          <div className={`${this.state.toogle?"":"enlarge-menu"}`} >
             {/* Sidebar */}
-            <div className="left-sidenav">
+            <div className="left-sidenav" style={{ width: '80px' }}>
                 <div className="brand">
                     <a href="/books/dashboard" className="logo">
                         <div className="row" style={{ textAlign: 'center' }}>
@@ -46,9 +61,6 @@ export class Dashboard extends Component {
                                     <img src={Logo} className="logo-dark" alt="logo-large" style={{ width: '25px', height: '25px' }}/>
                                 </span>                                
                             </div>
-                            <div className="col-8" style={{ paddingRight: '0', paddingLeft: '0', left: '0' }}>
-                                <h4 style={{ textAlign: 'left', fontSize: '20px', fontWeight: 'bold', marginTop: '20px' }}>Nextbooks</h4>
-                            </div>
                         </div>
                     </a>
                 </div>
@@ -56,14 +68,9 @@ export class Dashboard extends Component {
                     <ul className="metismenu left-sidenav-menu">
                         <li className="menu-label mt-0">Main</li>
                         <li>
-                            <a href="/books/dashboard"> <i data-feather="home" className="align-self-center menu-icon"></i><span>Dashboard</span><span className="menu-arrow"><i className="mdi mdi-chevron-right"></i></span></a>
+                            <a href="/books/dashboard"> <HomeFilled style={{ fontSize: '23px' }}/></a>
                         </li>
                     </ul>
-                    <div className="update-msg text-center">
-
-                        <h5 className="mt-3">{this.props.auth?this.props.auth.user.first_name + this.props.auth.user.last_name:"Not authenticated"}</h5>
-                        <p className="mb-3">Manage your expense and save money</p>
-                    </div>
                 </div>
             </div>
             {/* Appbar */}
@@ -74,11 +81,10 @@ export class Dashboard extends Component {
                             <li className="dropdown">
                                 <a className="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" href="#" role="button"
                                     aria-haspopup="false" aria-expanded="false">
-                                    <img src="https://firebasestorage.googleapis.com/v0/b/nextbooks-1a9f0.appspot.com/o/Profile%2Funnamed.jpg?alt=media&token=26aa8e12-b869-4a2f-afde-ced8ebe2bf0e" alt="profile-user" className="rounded-circle thumb-xs" />                                 
+                                    <img src={this.state.profile_img} alt="profile-user" className="rounded-circle thumb-xs" />                                 
                                 </a>
                                 <div className="dropdown-menu dropdown-menu-right">
                                     <a className="dropdown-item" href="/books/profile"><i data-feather="user" className="align-self-center icon-xs icon-dual mr-1"></i> Profile</a>
-                                    <a className="dropdown-item" href="#"><i data-feather="settings" className="align-self-center icon-xs icon-dual mr-1"></i> Settings</a>
                                     <div className="dropdown-divider mb-0"></div>
                                     <a className="dropdown-item" onClick={(e)=>{
                                         e.preventDefault()

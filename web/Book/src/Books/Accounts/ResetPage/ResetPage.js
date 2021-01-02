@@ -37,7 +37,6 @@ export class ResetPage extends Component {
 
     //  Recieves new props. Primarily used for Error Handling
     componentWillReceiveProps(nextProps){
-        console.log(nextProps.reset)
         if(nextProps.error !== undefined){
             if(nextProps.error.message === 'Network Error'){
                 error(nextProps.error.message)
@@ -56,7 +55,7 @@ export class ResetPage extends Component {
 
     render() {
         if(this.props.isAuthenticated){
-            return <Redirect to="/"/>
+            return <Redirect to="/books/dashboard"/>
         }
         return (
             <div className="container">

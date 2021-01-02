@@ -40,6 +40,7 @@ module.exports = {
         //  Check if user exists
         const userExists = await User.findOne({ email: email }).populate("activity");
         if(!userExists) return res.status(404).json({"error":"User does not exist"})
+        if(!userExists.isActive) return res.status(401).json({'error':'Account Deactivated. Contact Admin'})
 
         //  Validate User
         const validpass = await bcrypt.compare(password,userExists.password)
@@ -59,7 +60,6 @@ module.exports = {
         User.findOneAndUpdate({_id: userExists._id},{$addToSet:{logs: doc}}, { safe: true, upsert: true },function(err,done){
             if (err) return res.status(500).json({ "error": err })          
         }).exec().then((data)=>{
-            console.log('hwllo',data)
             return res.status(200).json({'user':data,'Token':token})  
         })
 
@@ -122,28 +122,22 @@ module.exports = {
     // Update User
     passportUserUpdate: async function(req,res){
         var { first_name, last_name, mobile, bio, profile_img } = req.body;
-
         // Check if user exists
         const userExists = await User.findOne({ _id: req.user._id });
         if(!userExists) return res.status(500).json({"error":"No Record Found"})
         
+        //  Data validation
         if(first_name ==='' || !first_name) first_name = userExists.first_name
         if(last_name ==='' || !last_name) last_name = userExists.last_name
         if(mobile ==='' || !mobile) mobile = userExists.mobile
         if(bio ==='' || !bio) bio = userExists.bio
         if(profile_img ==='' || !profile_img) profile_img = userExists.profile_img
 
+        //  Updates firlds into database
         try{
-            const doc = {
-                first_name: first_name,
-                last_name: last_name,
-                mobile: mobile,
-                bio: bio,
-                profile_img: profile_img
-            }
-            User.update({_id: req.user._id},doc,function(err,done){
+            User.findOneAndUpdate({_id: req.user._id},{$set: {first_name: first_name, last_name: last_name, mobile: mobile, bio: bio, profile_img: profile_img}},{new: true},function(err,done){
                 if (err) return res.status(500).json({ "error": err })
-                res.status(200).json({'msg':'Successfull'})
+                res.status(200).json({'msg':'Successfull','user':done})
             })
         }catch(err){
             return res.status(500).json({ "error": err })
@@ -155,7 +149,7 @@ module.exports = {
         res.status(200).json({'msg':'Logged out successfully'})
     },
 
-    // Reset Password Token
+    // Reset Password Token - For non-authenticated Users
     passportPasswordReset: async function(req,res){
         const { email } = req.body
 
@@ -167,6 +161,7 @@ module.exports = {
         const userExists = await User.findOne({ email: email });
         if(!userExists) return res.status(500).json({"error":"User does not exist"})
         
+        //  Resets password and send the logical link to the user via Mail
         try{
             const token = genPasswordResetToken(userExists)
             User.findOneAndUpdate({_id: userExists._id},{$set: {password_reset_token: token}},(err,doc)=>{
@@ -180,8 +175,8 @@ module.exports = {
         }
 
     },
-
-    // Reset Password 
+ 
+    // Reset Password  - For non Authenticated Users
     passportResetPassword: async function(req,res){
         const { resetLink, newpassword } = req.body
 
@@ -211,5 +206,31 @@ module.exports = {
         }else{
             return res.status(500).json({'error':'Authentication Error!!'})
         }
-    }
+    },
+
+    //  Deactivate Account
+    passportDeactivate: async function (req,res){
+        User.findOneAndUpdate({_id: req.user.id},{$set:{isActive: false}}, (err,data)=>{
+            if (err) return res.status(400).json({ "error": err })
+            return res.status(200).json({'msg':"Successfull",user: data})
+        })
+    },
+
+    //  Change Password  - For Authenticated Users
+    passportChangePassword: async function(req,res){
+        const { password } = req.body
+
+        //  Data Validation
+        if(password === '' || !password) return res.status(404).json({'error':'Password Field is mandatory'})
+
+        // HashPassword
+        const salt = await bcrypt.genSalt(10)
+        const saltPassword = await bcrypt.hash(password,salt)
+        
+        //  Changes password
+        User.findOneAndUpdate({_id: req.user._id},{$set:{password: saltPassword}}, (err,done)=>{
+            if(err) return res.status(500).json({'error':err})
+            return res.status(200).json({'msg':'Successfull', user: done})
+        })
+    }       
 }

@@ -7,7 +7,6 @@ let templates = {
     confirm_account       : "d-21c8486fe204428da8c6e50af05684bf",
 };
 function resetSuccess(data,email) {
-    console.log(email, data)
    const msg = {
       //extract the email details
       to: email,

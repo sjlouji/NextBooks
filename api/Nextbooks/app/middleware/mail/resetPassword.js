@@ -23,7 +23,6 @@ function passwordResetEmail(data,url) {
       if (error) {
           console.log(error);
       } else {
-          console.log(url)
           console.log("That's wassup!");
       }
     });
