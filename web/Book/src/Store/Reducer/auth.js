@@ -9,6 +9,8 @@ import {
     REGISTER_FAIL,
     RESET_PASSWORD,
     CHANGE_PASSWORD,
+    UPDATE_SUCCESS,
+    DEACTIVATE_SUCCESS
   } from '../Action/types';
   
   const initialState = {
@@ -72,6 +74,19 @@ import {
           isAuthenticated: false,
           isLoading: false,
         };
+      case UPDATE_SUCCESS:
+        return{
+          ...state,
+          user: action.payload,
+          isAuthenticated: true,
+          isLoading: false,
+        }
+      case DEACTIVATE_SUCCESS:
+        return{
+          ...state,
+          isAuthenticated: false,
+          isLoading: false
+        }
       default:
         return state;
     }

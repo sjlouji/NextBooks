@@ -1,10 +1,67 @@
 import React, { Component } from 'react'
 import { Button, Input } from 'antd';
 import { connect } from 'react-redux';
-const { Search } = Input;
+import { updateUser } from '../../../../Store/Action/auth'
+import { message } from 'antd'
 const { TextArea } = Input;
 
+// Success Messge Box
+const success = () => {
+    message.success('This is a success message');
+};
+  
+// Error Message Box
+const error = (data) => {
+    message.error(data);
+};
 export class Information extends Component {
+
+    //  Holds the state
+    state = {
+        first_name: '',
+        last_name: '',
+        mobile: '',
+        bio: ''
+    }
+
+    //  Constructor
+    constructor(props){
+        super(props)
+        this.handleUpdate = this.handleUpdate.bind(this)
+    }
+
+    //  Fired when the component mounts
+    componentDidMount(){
+        this.setState({
+            first_name: this.props.auth?this.props.auth.user.first_name:"",
+            last_name: this.props.auth?this.props.auth.user.last_name:"",
+            mobile: this.props.auth?this.props.auth.user.mobile:"",
+            bio: this.props.auth?this.props.auth.user.bio === ''?"Hey there. Please Update your profile":this.props.auth.user.bio:"Hey there. Please Update your profile"
+        })
+    }
+
+    //  Fired when the component recieves new props
+    componentWillReceiveProps(nextProps){
+        this.setState({ 
+            first_name: nextProps.auth?nextProps.auth.user.first_name:"",
+            last_name: nextProps.auth?nextProps.auth.user.last_name:"",
+            mobile: nextProps.auth?nextProps.auth.user.mobile:"",
+            bio: nextProps.auth?nextProps.auth.user.bio:"",
+         })
+    }
+
+    //  Error validation and hits the update API
+    handleUpdate(){
+        if(this.state.first_name === ''){error('First Name field can not be empty')}
+        else if(this.state.last_name === ''){error('Last Name field can not be empty')}
+        else if(this.state.mobile === ''){error('Mobile Number field can not be empty')}
+        else if(this.state.bio === ''){error('Bio field can not be empty')}
+        else{this.props.updateUser(this.state.first_name,this.state.last_name,this.state.mobile,this.state.bio)}
+    }
+    
+    //  Update State
+    onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+    
     render() {
         return (
           <div>
@@ -12,7 +69,7 @@ export class Information extends Component {
             Basic info, like your name and mobile, that you use on NextBooks Platform
             <div className="container">
                 <div className="row" style={{ marginLeft: '200px', marginRight: '200px' }}>
-                    <Search
+                    <Input
                         placeholder="Id"
                         allowClear
                         disabled
@@ -23,37 +80,46 @@ export class Information extends Component {
                     />
                 </div>
                 <div className="row" style={{ marginLeft: '200px', marginRight: '200px' }}>
-                    <Search
+                    <Input
                         placeholder="First Name"
                         allowClear
-                        value={this.props.auth?this.props.auth.user.first_name:""}
+                        name="first_name"
+                        onChange={this.onChange}
+                        value={this.state.first_name}
+                        onClick={this.handleUpdate}
                         style={{  marginTop: '20px' }}
                         enterButton="Update"
                         size="medium"
                     />
                 </div>
                 <div className="row" style={{ marginLeft: '200px', marginRight: '200px' }}>
-                    <Search
+                    <Input
                         placeholder="Last Name"
                         allowClear
-                        value={this.props.auth?this.props.auth.user.last_name:""}
+                        name="last_name"
+                        onChange={this.onChange}
+                        onClick={this.handleUpdate}
+                        value={this.state.last_name}
                         style={{  marginTop: '20px' }}
                         enterButton="Update"
                         size="medium"
                     />
                 </div>
                 <div className="row" style={{ marginLeft: '200px', marginRight: '200px' }}>
-                    <Search
+                    <Input
                         placeholder="Mobile"
                         allowClear
-                        value={this.props.auth?this.props.auth.user.mobile:""}
+                        name="mobile"
+                        onChange={this.onChange}
+                        value={this.state.mobile}
+                        onClick={this.handleUpdate}
                         style={{ marginTop: '20px' }}
                         enterButton="Update"
                         size="medium"
                     />
                 </div>
                 <div className="row" style={{ marginLeft: '200px', marginRight: '200px' }}>
-                    <Search
+                    <Input
                         placeholder="Email"
                         disabled
                         allowClear
@@ -64,9 +130,9 @@ export class Information extends Component {
                     />
                 </div>
                 <div className="row" style={{ marginLeft: '200px', marginRight: '200px' }}>
-                    <TextArea autoSize={{ minRows: 10, maxRows: 15 }} autoSize style={{ marginTop: '20px' }} value={this.props.auth?this.props.auth.user.bio === ''?"Hey there. Please Update your profile":this.props.auth.user.bio:"Hey there. Please Update your profile"}></TextArea>
+                    <TextArea autoSize={{ minRows: 10, maxRows: 15 }} autoSize style={{ marginTop: '20px' }} name="bio" onChange={this.onChange} value={this.state.bio}></TextArea>
                     <div style={{ width: '100%' }}>
-                        <Button style={{ float: 'right', width: '20%', marginTop: '15px' }} type="primary">Update Bio</Button>
+                        <Button style={{ float: 'right', width: '20%', marginTop: '15px' }} onClick={this.handleUpdate} type="primary">Update Bio</Button>
                     </div>
                 </div>
             </div>
@@ -78,8 +144,9 @@ export class Information extends Component {
 const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated,
     isLoading: state.auth.isLoading,
-    auth: state.auth.user
+    auth: state.auth.user,
+    update: state.auth.update
   });
   
 
-export default connect(mapStateToProps,)(Information);
+export default connect(mapStateToProps,{updateUser})(Information);

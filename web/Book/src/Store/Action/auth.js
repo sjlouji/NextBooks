@@ -8,6 +8,8 @@ import {
   RESET_PASSWORD,
   CHANGE_PASSWORD,
   AUTH_ERROR,
+  UPDATE_SUCCESS,
+  DEACTIVATE_SUCCESS
 } from './types';
 
 
@@ -24,10 +26,8 @@ export const loadUser = () => (dispatch, getState) => {
         type: USER_LOADED,
         payload: res.data,
       });
-      console.log(res.data)
     })
     .catch((err) => {
-      console.log("In auth")
 
     });
 };
@@ -49,7 +49,6 @@ export const login = (email, password) => (dispatch) => {
         type: LOGIN_SUCCESS,
         payload: res.data,
       });
-      console.log(res.data)
     })
     .catch((err) => {
       dispatch({
@@ -125,10 +124,8 @@ export const changePassword = ( newpassword, resetLink ) => (dispatch) => {
     
     },
   };
-  console.log(newpassword,resetLink)
   // Request Body
   const body = JSON.stringify({ newpassword, resetLink });
-  console.log(body)
   api
     .put('/auth/reset', body, config)
     .then((res) => {
@@ -145,9 +142,75 @@ export const changePassword = ( newpassword, resetLink ) => (dispatch) => {
     });
 };
 
+// UPDATE USER
+export const updateUser = ( first_name, last_name, mobile, bio, profile_img ) => (dispatch,getState) => {
+  // Headers
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  // Request Body
+  const body = JSON.stringify({ first_name, last_name, mobile, bio, profile_img });
+  api
+    .put('/auth/update', body, tokenConfig(getState))
+    .then((res) => {
+      dispatch({
+        type: UPDATE_SUCCESS,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: AUTH_ERROR,
+        payload: err
+      })
+    });
+};
+
+// DEACTIVATE USER
+export const deactivateUser = () => (dispatch,getState) => {
+  // Request Body
+  const body = JSON.stringify({  });
+  api
+    .put('/auth/deactivate', body ,tokenConfig(getState))
+    .then((res) => {
+      dispatch({
+        type: DEACTIVATE_SUCCESS,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: AUTH_ERROR,
+        payload: err
+      })
+    });
+};
+
+// CHANGE PASSWORD USER
+export const passwordChangeUI = (password) => (dispatch,getState) => {
+  // Request Body
+  const body = JSON.stringify({ password });
+  api
+    .put('/auth/passwordChange', body ,tokenConfig(getState))
+    .then((res) => {
+      dispatch({
+        type: UPDATE_SUCCESS,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: AUTH_ERROR,
+        payload: err
+      })
+    });
+};
+
 // LOGOUT USER
 export const logout = () => (dispatch, getState) => {
-  console.log("logged out")
   dispatch({
     type: LOGOUT_SUCCESS,
     payload: "he"

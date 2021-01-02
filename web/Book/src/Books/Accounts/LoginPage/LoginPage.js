@@ -40,7 +40,6 @@ export class LoginPage extends Component {
     //  Recieves new props. Primarily used for Error Handling
     componentWillReceiveProps(nextProps){
         if(nextProps.error !== undefined){
-            console.log(nextProps.error.message)
             if(nextProps.error.message === 'Network Error'){
                 error(nextProps.error.message)
             }else{

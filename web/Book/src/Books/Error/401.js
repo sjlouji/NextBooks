@@ -11,7 +11,7 @@ export class NoAccess extends Component {
                             <div class="col-lg-5 mx-auto">
                                     <div class="card-body">
                                         <div class="ex-page-content text-center">
-                                            <img src="assets/images/error.svg" alt="0" class="" height="170"/>
+                                            <img src="https://firebasestorage.googleapis.com/v0/b/nextbooks-1a9f0.appspot.com/o/images%2Ferror.svg?alt=media&token=405ac82a-b244-46b0-9b46-bed0a9858343" alt="0" class="" height="170"/>
                                             <h1 class="mt-5 mb-4">401!</h1>  
                                             <h5 class="font-16 text-muted mb-5">Somthing went wrong</h5>                                    
                                         </div>          

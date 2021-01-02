@@ -34,7 +34,6 @@ export class RegisterPage extends Component {
     //  Handles the errors and  that hapens after Register
     onSubmit = (e) => {
         e.preventDefault();
-        console.log(this.state.mobile.length)
         if(this.state.first_name === '') {error('First Name Field is required')}
         else if(this.state.last_name === '') {error('Last Name Field is required')}
         else if(this.state.mobile === '') {error('Mobile Field is required')}
@@ -58,7 +57,6 @@ export class RegisterPage extends Component {
     //  Recieves new props. Primarily used for Error Handling
     componentWillReceiveProps(nextProps){
         if(nextProps.error !== undefined){
-            console.log(nextProps.error.message)
             if(nextProps.error.message === 'Network Error'){
                 error(nextProps.error.message)
             }else{
@@ -73,7 +71,7 @@ export class RegisterPage extends Component {
 
     render() {
         if(this.props.isAuthenticated){
-            return <Redirect to="/"/>
+            return <Redirect to="/books/dashboard"/>
         }
         return (
             <div className="container">
