@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { Button, Modal, Input, message } from 'antd'
 import { logout, deactivateUser,passwordChangeUI} from '../../../../Store/Action/auth';
 import { connect } from 'react-redux';
+import { ExclamationCircleFilled } from '@ant-design/icons';
+
+const { confirm } = Modal;
 
 export class Security extends Component {
 
@@ -16,6 +19,7 @@ export class Security extends Component {
         super(props)
         this.deactivateAccount = this.deactivateAccount.bind(this)
         this.openPasswordReset = this.openPasswordReset.bind(this)
+        this.showDeactivateConfirm = this.showDeactivateConfirm.bind(this)
     }
 
     //  Handle Logout
@@ -50,6 +54,34 @@ export class Security extends Component {
         }
     }
 
+    //  Confirm Dialog to confirm if user wants to deactivate account or not
+    showDeactivateConfirm(deactivateAccount) {
+        confirm({
+          title: 'Are you sure to Deactivate this Account?',
+          icon: <ExclamationCircleFilled style={{ color: 'red' }}/>,
+          content: 'Deactivating does not delete your Account, just locks your Account.  To Re-Activate your Account, contact Admin.',
+          onOk() {
+              deactivateAccount()
+          },
+          onCancel() {
+          },
+        });
+      }
+
+    //  Confirm Dialog to confirm if user wants to Logout account or not
+    showLogoutConfirm(logoutAccount) {
+        confirm({
+          title: 'Are you sure to Logout from this Account?',
+          icon: <ExclamationCircleFilled style={{ color: 'red' }}/>,
+          content: 'By Logging out, the session ends.  To Login back, you need to provide your credentials again.',
+          onOk() {
+            logoutAccount()
+          },
+          onCancel() {
+          },
+        });
+      }
+
     render() {
         return (
           <div>
@@ -70,7 +102,7 @@ export class Security extends Component {
                     <p style={{ color: '#8a8a8a' }}>This does not delete your account, but just end the session</p>
                 </div>
                 <div className="col" style={{ textAlign: 'center' }}>
-                    <Button type="danger" shape="round" onClick={()=>this.handleLogout()}>Logout</Button>
+                    <Button type="danger" shape="round" onClick={()=>this.showLogoutConfirm(this.props.logout)}>Logout</Button>
                 </div>
             </div>
             <div className="row" style={{ marginTop: '20px' }}>
@@ -79,7 +111,7 @@ export class Security extends Component {
                     <p style={{ color: '#8a8a8a' }}>Data about this account will not be deleted from our server since your are deactivating. </p>
                 </div>
                 <div className="col" style={{ textAlign: 'center' }}>
-                    <Button type="danger" shape="round" onClick={this.deactivateAccount}>Deactivate Account</Button>
+                    <Button type="danger" shape="round" onClick={()=>this.showDeactivateConfirm(this.props.deactivateUser)}>Deactivate Account</Button>
                 </div>
             </div>
             <Modal

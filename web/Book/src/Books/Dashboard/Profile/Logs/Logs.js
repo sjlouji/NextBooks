@@ -15,17 +15,15 @@ export class Logs extends Component {
 
     //  Download all the Activities of the User
     handleDownload(){
-        const title = this.props.auth?this.props.auth.first_name+"  Login Report - NEXTBOOKS":"";
+        const title = this.props.auth?this.props.auth.user.first_name+"  Login Report - NEXTBOOKS":"";
         const headers = [["ID", "AGENT", "IP", "DATE"]];  
         const marginLeft = 40;
-        const unit = "pt";
-        const size = "A4"; // Use A1, A2, A3 or A4
         const orientation = "portrait"; // portrait or landscape
-        const doc = new jsPDF(orientation, unit, size);
+        const doc = new jsPDF(orientation);
 
         doc.setFontSize(15);    
         if(this.props.auth){
-            const data = this.props.auth.logs.map(elt=> [elt._id, elt.agent, elt.ip, elt.last_login]);  
+            const data = this.props.auth.user.logs.map(elt=> [elt._id, elt.agent, elt.ip, moment(elt.last_login).format('LLL')]);  
             let content = {
                 startY: 50,
                 head: headers,
@@ -34,7 +32,7 @@ export class Logs extends Component {
             doc.text(title,marginLeft, 40)
             doc.autoTable(content);
         }
-        doc.save(this.props.auth?this.props.auth.first_name+"  Login Report":"");
+        doc.save(this.props.auth?this.props.auth.user.first_name+"  Login Report":"");
     }
     render() {
         return (
@@ -52,7 +50,7 @@ export class Logs extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.props.auth?this.props.auth.logs.reverse().slice(0,10).map((data)=>{
+                        {this.props.auth?this.props.auth.user.logs.reverse().slice(0,10).map((data)=>{
                             return(
                                 <tr key={data._id}>
                                     <td><p style={{ width: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{data.agent}</p></td>
@@ -71,7 +69,7 @@ export class Logs extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    auth: state.auth.user.user
+    auth: state.auth.user
 });
 
 export default connect(mapStateToProps,)(Logs);

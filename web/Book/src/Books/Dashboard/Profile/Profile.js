@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Upload } from 'antd';
+import { Card, Upload,Spin } from 'antd';
 import { Image } from 'antd';
 import { Divider } from 'antd';
 import { connect } from 'react-redux';
@@ -10,13 +10,17 @@ import { Button } from 'antd'
 import { message } from 'antd'
 import { storage } from "../../../firebase/firebase";
 import { updateUser } from '../../../Store/Action/auth'
+import { LoadingOutlined } from '@ant-design/icons';
+
+
+
 export class Profile extends Component {
 
     //  Holds the State
     state = {
         menu: 0,
         profile_img: 'https://firebasestorage.googleapis.com/v0/b/nextbooks-1a9f0.appspot.com/o/Profile%2Funnamed.jpg?alt=media&token=26aa8e12-b869-4a2f-afde-ced8ebe2bf0e',
-        def_profile_img: 'https://firebasestorage.googleapis.com/v0/b/nextbooks-1a9f0.appspot.com/o/Profile%2Funnamed.jpg?alt=media&token=26aa8e12-b869-4a2f-afde-ced8ebe2bf0e'
+        is_loading: false,
     }
 
     //  Constructor
@@ -32,13 +36,17 @@ export class Profile extends Component {
         })
     }
 
+    antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
     //  Uploads profile image to firebase storage
     handleUpload(e){
+        this.setState({is_loading: true})
         const uploadTask = storage.ref(`/Profile/${this.props.auth?this.props.auth.user.email:""}`).put(e)
         uploadTask.on('state_changed', 
         (snapShot) => {
 
         }, (err) => {
+            this.setState({is_loading: false})
           message(err)
         }, () => {
           storage.ref('Profile').child(this.props.auth?this.props.auth.user.email:"").getDownloadURL()
@@ -46,7 +54,8 @@ export class Profile extends Component {
             message.success(`Profile Image updated successfully.`);
             this.props.updateUser("",'','','',fireBaseUrl)
             this.setState({  
-                profile_img: fireBaseUrl
+                profile_img: fireBaseUrl,
+                is_loading: false
             })
            })
         })
@@ -86,9 +95,9 @@ export class Profile extends Component {
                                   <h4 class="page-title">Profile</h4>
                                   <ol class="breadcrumb">
                                       <li class="breadcrumb-item"><a href="/books/profile">Profile</a></li>
-                                      {this.props.location.pathname==='/books/profile'?<li class="breadcrumb-item active">Personal Information</li>:""}
-                                      {this.props.location.pathname==='/books/profile/logs'?<li class="breadcrumb-item active">Logs</li>:""}
-                                      {this.props.location.pathname==='/books/profile/security'?<li class="breadcrumb-item active">Account Security</li>:""}
+                                      {this.state.menu === 0?<li class="breadcrumb-item active">Personal Information</li>:""}
+                                      {this.state.menu === 1?<li class="breadcrumb-item active">Security</li>:""}
+                                      {this.state.menu === 2?<li class="breadcrumb-item active">Logs</li>:""}
                                   </ol>
                               </div>
                           </div>
@@ -98,15 +107,18 @@ export class Profile extends Component {
               {/* Content */}
               <div className="row">
                 <div className="col-4">
+                    
                   <Card>
+
                       <div style={{ width: '100%', float: 'right', textAlign: 'end' }}>
-                        <Upload accept=".png, .jpg, .jpeg" multiple={false} beforeUpload={this.handleUpload} showUploadList={false} style={{ float: 'right' }}><Button type="primary">Update Profile Pic</Button></Upload>
+                        <Spin indicator={this.antIcon} spinning={this.state.is_loading} style={{ float: 'left' }}/>
+                        <Upload accept=".png, .jpg, .jpeg" multiple={false} beforeUpload={this.handleUpload} showUploadList={false} style={{ float: 'right' }}><Button type="primary"> Update Profile Pic</Button></Upload>
                       </div>
                     <Image
                       width="40%"
                       style={{ borderRadius: '50%' }}
                       src={this.state.profile_img}
-                    />
+                    ></Image>
                     <h3 style={{ fontWeight: 'normal', marginTop: '15px' }}>{this.props.auth?this.props.auth.user.first_name + this.props.auth.user.last_name:""}</h3>
                     <h6 style={{ color: '#525252', fontSize: '13', fontWeight: 'lighter' }}>{this.props.auth?this.props.auth.user.email:""}</h6>
                     <div style={{ marginTop: '20px', textAlign: 'justify' }}>
