@@ -3,8 +3,8 @@ import Logo from '../../../Assets/logo.svg'
 import { resetPassword } from '../../../Store/Action/auth';
 import { withRouter, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
-import { message } from 'antd';
-
+import { message, Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
 // Success Messge Box
 const success = (data) => {
@@ -49,6 +49,10 @@ export class ResetPage extends Component {
             success(nextProps.reset.msg)
         }
     }
+
+    //  Spinner Icon
+    antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
     
     //  Update State
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -82,6 +86,11 @@ export class ResetPage extends Component {
                                                             <input type="email" className="form-control" name="email" id="email" placeholder="Email" value={this.state.email} onChange={this.onChange}/>
                                                         </div>                                    
                                                     </div>
+                                                    <div className="form-group mb-2 my-3" style={{ textAlign: 'center' }}>
+                                                        <div className="input-group" >                                  
+                                                            <Spin indicator={this.antIcon} spinning={this.props.authLoading} style={{ float: 'center' }}/>                                                         
+                                                        </div>                               
+                                                    </div>
                                                     <div className="form-group mb-0 my-3 row">
                                                         <div className="col-12">
                                                             <button className="btn btn-primary btn-block waves-effect waves-light"  type="submit">Reset </button>
@@ -110,7 +119,8 @@ const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated,
     isLoading: state.auth.isLoading,
     error: state.auth.error,
-    reset: state.auth.reset
+    reset: state.auth.reset,
+    authLoading: state.auth.authLoading
   });
   
 export default connect(mapStateToProps, {resetPassword})(withRouter(ResetPage));

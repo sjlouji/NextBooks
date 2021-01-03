@@ -45,6 +45,11 @@ export class Dashboard extends Component {
          })
     }
 
+    //  Hadles Navigation
+    handleNav(data){
+        this.props.history.push(data)
+    }
+
     render() {
         if(!this.props.isAuthenticated){
             this.props.history.push('/auth/login')
@@ -52,7 +57,7 @@ export class Dashboard extends Component {
         return (
           <div className={`${this.state.toogle?"":"enlarge-menu"}`} >
             {/* Sidebar */}
-            <div className="left-sidenav" style={{ width: '80px' }}>
+            <div className="left-sidenav" style={{ width: '60px' }}>
                 <div className="brand">
                     <a href="/books/dashboard" className="logo">
                         <div className="row" style={{ textAlign: 'center' }}>
@@ -66,9 +71,9 @@ export class Dashboard extends Component {
                 </div>
                 <div className="menu-content h-100" data-simplebar>
                     <ul className="metismenu left-sidenav-menu">
-                        <li className="menu-label mt-0">Main</li>
-                        <li>
-                            <a href="/books/dashboard"> <HomeFilled style={{ fontSize: '23px' }}/></a>
+                        <li className="menu-label mt-0" style={{ textAlign: 'center' }}>Main</li>
+                        <li style={this.props.history.location.pathname==="/books/dashboard" || this.props.history.location.pathname==="/" ?{ backgroundColor: '#e9efff',width: '100%', padding: '20px' }:{ width: '100%', padding: '20px' }}>
+                            <a onClick={()=>this.handleNav('/books/dashboard')}> <HomeFilled style={{ fontSize: '23px' }}/></a>
                         </li>
                     </ul>
                 </div>
@@ -84,7 +89,7 @@ export class Dashboard extends Component {
                                     <img src={this.state.profile_img} alt="profile-user" className="rounded-circle thumb-xs" />                                 
                                 </a>
                                 <div className="dropdown-menu dropdown-menu-right">
-                                    <a className="dropdown-item" href="/books/profile"><i data-feather="user" className="align-self-center icon-xs icon-dual mr-1"></i> Profile</a>
+                                    <a className="dropdown-item" onClick={()=>this.handleNav('/books/profile')}><i data-feather="user" className="align-self-center icon-xs icon-dual mr-1"></i> Profile</a>
                                     <div className="dropdown-divider mb-0"></div>
                                     <a className="dropdown-item" onClick={(e)=>{
                                         e.preventDefault()

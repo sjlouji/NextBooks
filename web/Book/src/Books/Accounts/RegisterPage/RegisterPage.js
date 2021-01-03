@@ -3,7 +3,8 @@ import Logo from '../../../Assets/logo.svg'
 import { register } from '../../../Store/Action/auth';
 import { connect } from 'react-redux';
 import { Redirect, withRouter } from "react-router";
-import { message } from 'antd';
+import { message, Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
 // Success Messge Box
 const success = () => {
@@ -65,6 +66,10 @@ export class RegisterPage extends Component {
         }
     }
 
+    //  Spinner Icon
+    antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
+
     // Update State
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
@@ -125,6 +130,11 @@ export class RegisterPage extends Component {
                                                             <input type="password" className="form-control" name="password" id="password" value={this.state.password} onChange={this.onChange} placeholder="Password"/>
                                                         </div>                               
                                                     </div>
+                                                    <div className="form-group mb-2 my-3" style={{ textAlign: 'center' }}>
+                                                        <div className="input-group" >                                  
+                                                            <Spin indicator={this.antIcon} spinning={this.props.authLoading} style={{ float: 'center' }}/>                                                         
+                                                        </div>                               
+                                                    </div>
                                                     <div className="form-group my-6 row">
                                                         <div className="col-12">
                                                             <button className="btn btn-primary btn-block waves-effect waves-light"  type="submit">Register</button>
@@ -153,6 +163,7 @@ export class RegisterPage extends Component {
 const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated,
     isLoading: state.auth.isLoading,
+    authLoading: state.auth.authLoading,
     error: state.auth.error
   });
   

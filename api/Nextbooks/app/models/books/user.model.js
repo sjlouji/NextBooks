@@ -79,7 +79,7 @@ var userSchema = new mongoose.Schema({
     profile_img: {
         type: String,
         required: false,
-        default: ''
+        default: 'https://firebasestorage.googleapis.com/v0/b/nextbooks-1a9f0.appspot.com/o/Profile%2Funnamed.jpg?alt=media&token=26aa8e12-b869-4a2f-afde-ced8ebe2bf0e'
     },
     logs: [activitySchema],
 },{timestamps: true})

@@ -9,7 +9,8 @@ import {
   CHANGE_PASSWORD,
   AUTH_ERROR,
   UPDATE_SUCCESS,
-  DEACTIVATE_SUCCESS
+  DEACTIVATE_SUCCESS,
+  AUTH_INIT
 } from './types';
 
 
@@ -34,6 +35,8 @@ export const loadUser = () => (dispatch, getState) => {
 
 // LOGIN USER
 export const login = (email, password) => (dispatch) => {
+  dispatch({ type: AUTH_INIT });
+  
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -60,6 +63,7 @@ export const login = (email, password) => (dispatch) => {
 
 // REGISTER USER
 export const register = ({ first_name,last_name, password, email, mobile }) => (dispatch) => {
+  dispatch({ type: AUTH_INIT });
   // Headers
   const config = {
     headers: {
@@ -88,6 +92,8 @@ export const register = ({ first_name,last_name, password, email, mobile }) => (
 
 // RESET PASSWORD USER
 export const resetPassword = ( email ) => (dispatch) => {
+  dispatch({ type: AUTH_INIT });
+
   // Headers
   const config = {
     headers: {
@@ -116,6 +122,8 @@ export const resetPassword = ( email ) => (dispatch) => {
 
 // PASSWORD CHANGE
 export const changePassword = ( newpassword, resetLink ) => (dispatch) => {
+  dispatch({ type: AUTH_INIT });
+
   // Headers
   const config = {
     headers: {

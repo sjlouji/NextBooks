@@ -3,7 +3,8 @@ import Logo from '../../../Assets/logo.svg'
 import { changePassword } from '../../../Store/Action/auth';
 import { connect } from 'react-redux';
 import { withRouter } from "react-router";
-import { message } from 'antd';
+import { message, Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
 // Success Messge Box
 const success = (data) => {
@@ -43,6 +44,11 @@ export class PasswordReset extends Component {
             success(nextProps.reset.msg)
         }
     }
+
+    //  Spinner Icon
+    antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
+
     
     //  Update State
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -73,6 +79,11 @@ export class PasswordReset extends Component {
                                                             <input type="password" className="form-control" name="password" id="password" placeholder="Change Password" value={this.state.email} onChange={this.onChange}/>
                                                         </div>                                    
                                                     </div>
+                                                    <div className="form-group mb-2 my-3" style={{ textAlign: 'center' }}>
+                                                        <div className="input-group" >                                  
+                                                            <Spin indicator={this.antIcon} spinning={this.props.authLoading} style={{ float: 'center' }}/>                                                         
+                                                        </div>                               
+                                                    </div>
                                                     <div className="form-group mb-0 my-3 row">
                                                         <div className="col-12">
                                                             <button className="btn btn-primary btn-block waves-effect waves-light"  type="submit">Reset Password</button>
@@ -97,6 +108,7 @@ export class PasswordReset extends Component {
 const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated,
     isLoading: state.auth.isLoading,
+    authLoading: state.auth.authLoading,
     error: state.auth.error,
     reset: state.auth.reset,
   });

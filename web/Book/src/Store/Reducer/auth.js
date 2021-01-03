@@ -10,13 +10,15 @@ import {
     RESET_PASSWORD,
     CHANGE_PASSWORD,
     UPDATE_SUCCESS,
-    DEACTIVATE_SUCCESS
+    DEACTIVATE_SUCCESS,
+    AUTH_INIT
   } from '../Action/types';
   
   const initialState = {
     token: localStorage.getItem('token'),
     isAuthenticated: false,
     isLoading: false,
+    authLoading: false,
     user: null,
   };
 
@@ -28,6 +30,7 @@ import {
           ...state,
           isAuthenticated: true,
           isLoading: false,
+          authLoading: false,
           user: action.payload,
         };
       case LOGIN_SUCCESS:
@@ -36,6 +39,7 @@ import {
           ...state,
           user: action.payload,
           isAuthenticated: true,
+          authLoading: false,
           isLoading: false,
         };
       case REGISTER_SUCCESS:
@@ -45,24 +49,31 @@ import {
           user: action.payload,
           isAuthenticated: true,
           isLoading: false,
+          authLoading: false
         };
       case AUTH_ERROR:
         return {
           ...state,
           error: action.payload,
+          authLoading: false
         }
       case LOGIN_FAIL:
       case LOGOUT_SUCCESS:
         localStorage.removeItem('token');
         return{
-          logout: 'SUCCESS'
+          logout: 'SUCCESS',
+          authLoading: false
         }
       case RESET_PASSWORD:
         return{
-          reset: action.payload
+          ...state,
+          reset: action.payload,
+          authLoading: false
         };
       case CHANGE_PASSWORD:
         return{
+          ...state,
+          authLoading: false,
           reset: action.payload
         };
       case REGISTER_FAIL:
@@ -73,6 +84,7 @@ import {
           user: null,
           isAuthenticated: false,
           isLoading: false,
+          authLoading: false
         };
       case UPDATE_SUCCESS:
         return{
@@ -87,6 +99,12 @@ import {
           isAuthenticated: false,
           isLoading: false
         }
+      case AUTH_INIT:
+        return{
+          isAuthenticated: false,
+          authLoading: true,
+          user: null,
+        }   
       default:
         return state;
     }

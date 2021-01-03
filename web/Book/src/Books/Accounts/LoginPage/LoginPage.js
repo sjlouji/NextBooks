@@ -3,7 +3,8 @@ import Logo from '../../../Assets/logo.svg'
 import { login } from '../../../Store/Action/auth';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
-import { message } from 'antd';
+import { message, Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
 
 // Success Messge Box
@@ -47,6 +48,9 @@ export class LoginPage extends Component {
             }
         }
     }
+
+    //  Spinner Icon
+    antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
     
     //  Update State
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -92,8 +96,8 @@ export class LoginPage extends Component {
                                                         </div>                               
                                                     </div>
                                                     <div className="form-group form-group mb-0 row my-3">
-                                                        <div className="col-6">
-
+                                                        <div className="col-6" style={{ textAlign: 'center' }}>
+                                                            <Spin indicator={this.antIcon} spinning={this.props.authLoading} style={{ float: 'center' }}/>    
                                                         </div>
                                                         <div className="col-sm-6 text-right" >
                                                             <p className="mb-0">Forgot Password ?  <a href="/auth/reset" className="text-primary ml-2">Reset</a></p>
@@ -127,6 +131,7 @@ export class LoginPage extends Component {
 const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated,
     isLoading: state.auth.isLoading,
+    authLoading: state.auth.authLoading,
     error: state.auth.error
   });
   
