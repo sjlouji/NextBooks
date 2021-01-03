@@ -130,7 +130,7 @@ export class Profile extends Component {
                     <Divider />
                     <div className="menu-content h-100" data-simplebar>
                         <li className="menu-label">Profile Settings</li>
-                        <ul className="metismenu left-sidenav-menu">
+                        <ul className="metismenu left-sidenav-menu" style={{ overflow: 'hidden' }}>
                             <li>
                                 <a onClick={()=>this.handleNav(0)}> <i data-feather="home" className="align-self-center menu-icon"></i><span>Personal Infomation</span><span className="menu-arrow"><i className="mdi mdi-chevron-right" ></i></span></a>
                             </li>
