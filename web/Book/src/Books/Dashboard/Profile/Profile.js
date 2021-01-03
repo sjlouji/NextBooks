@@ -105,10 +105,10 @@ export class Profile extends Component {
                   </div>
               </div>
               {/* Content */}
-              <div className="row">
+              <div className="row" style={{ paddingLeft: '60px', paddingRight: '60px', paddingTop: '30px' }}>
                 <div className="col-4">
                     
-                  <Card>
+                  <Card style={{ width: '400px', borderColor: 'white' }}>
 
                       <div style={{ width: '100%', float: 'right', textAlign: 'end' }}>
                         <Spin indicator={this.antIcon} spinning={this.state.is_loading} style={{ float: 'left' }}/>
@@ -147,8 +147,8 @@ export class Profile extends Component {
                     </div>
                   </Card>
                 </div>
-                <div className="col-8" style={{ paddingLeft: 0, paddingRight: 23 }}>
-                    <Card style={{ width: '100%' }}>
+                <div className="col-8" >
+                    <Card style={{ width: '100%', borderColor: 'white' }}>
                         {menu}
                     </Card>
                 </div>

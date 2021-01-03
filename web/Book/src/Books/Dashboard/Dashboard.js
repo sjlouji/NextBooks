@@ -52,7 +52,7 @@ export class Dashboard extends Component {
         return (
           <div className={`${this.state.toogle?"":"enlarge-menu"}`} >
             {/* Sidebar */}
-            <div className="left-sidenav" style={{ width: '80px' }}>
+            <div className="left-sidenav" style={{ width: '60px' }}>
                 <div className="brand">
                     <a href="/books/dashboard" className="logo">
                         <div className="row" style={{ textAlign: 'center' }}>

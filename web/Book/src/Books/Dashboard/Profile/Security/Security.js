@@ -39,7 +39,9 @@ export class Security extends Component {
     
     //  Hits the reset password API 
     handlePasswordReset(){
-        this.props.passwordChangeUI(this.state.password)
+
+        if(this.state.password === ''){message.error('Password Field can not be empty')}
+        else{this.props.passwordChangeUI(this.state.password)}
     }
 
     //  Update State

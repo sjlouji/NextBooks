@@ -1,11 +1,14 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const AdminBro = require('admin-bro')
+const AdminBroMongoose = require('@admin-bro/mongoose')
+const AdminBroExpressjs = require('@admin-bro/express')
 var cors = require('cors')
 var morgan = require('morgan')
 const router = require('./app/routes/books/index')
 require('dotenv').config()
-require('./app/models/books/index')
+const User = require('./app/models/books/user.model')
 const app = express()
 
 // Database
@@ -23,6 +26,25 @@ mongoose.connection.once('open',function(){
 app.use(bodyParser.json())
 app.use(morgan('combined',))
 app.use(cors())
+
+//Admin Bro
+AdminBro.registerAdapter(AdminBroMongoose)
+const AdminBroOptions = {
+  resources: [User],
+}
+const adminBro = new AdminBro(AdminBroOptions)
+const routers = AdminBroExpressjs.buildAuthenticatedRouter(adminBro, {
+  authenticate: async (email, password) => {
+    if(email === 'admin@nextbooks.com'){
+      if(password === 'admin'){
+        return true
+      }
+    }
+    return false
+  },
+  cookiePassword: 'JoanLouji',
+})
+app.use(adminBro.options.rootPath, routers)
 
 //Routes
 app.use('/',router)
