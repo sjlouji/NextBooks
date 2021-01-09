@@ -33,7 +33,6 @@ module.exports = {
     // Passport Login
     passportLogin : async function(req, res){
         const { email, password } = req.body;
-        console.log('added')
         // Validating Payload with JOI
         const {validate} =  loginValidation(req.body);
         if(validate) return res.status(400).json({"error":validate.error.details[0].message});
