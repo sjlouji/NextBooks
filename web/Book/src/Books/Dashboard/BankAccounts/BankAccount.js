@@ -1,12 +1,77 @@
 import React, { Component } from 'react'
 import AccountComponent from './Component/AccountComponent'
-import { Row, Col, Modal, Input, Button, Select } from 'antd';
+import { Row, Col, Modal, Input, Button, Select, message } from 'antd';
+import { connect } from 'react-redux';
+import { loadAccount, addAccount, deleteAccount } from '../../../Store/Action/account'
 
+// Success Messge Box
+const success = () => {
+    message.success('This is a success message');
+};
+  
+// Error Message Box
+const error = (data) => {
+    message.error(data);
+};
 export class BankAccount extends Component {
 
+    //  Holds all the State varialbles
     state = {
-        visible: false
+        visible: false,
+        account_name: '',
+        account_type: 'cash_account',
+        initialBalance: '',
+        account_provider: '',
+        account_id: '',
+        account: []
     }
+
+    //  Constructor
+    constructor(props){
+        super(props)
+        this.handleDelete = this.handleDelete.bind(this)
+    }
+
+    //  Fired when the component gets loaded
+    componentDidMount(){
+        this.props.loadAccount()
+        this.setState({ account: this.props.account })
+    }
+
+    //  Fired when the component recieves new props
+    componentWillReceiveProps(nextProps){
+        if(nextProps.error !== undefined){
+            if(nextProps.error.message === 'Network Error'){
+                error(nextProps.error.message)
+                this.setState({ account: nextProps.account })
+            }else{
+                this.setState({ account: nextProps.account })
+                error(nextProps.error.response.data.error)
+            }
+        }
+        this.setState({ account: nextProps.account })
+    }
+
+    //  Handles the things that happen after clicking Add a new Account
+    handleAddAccount(){
+        if(this.state.account_id === ''){error('Account Number can not be Empty')}
+        else if(this.state.account_name === ''){error('Account Name can not be Empty')}
+        else if(this.state.initialBalance === ''){error('Initial balance can not be Empty')}
+        else if(this.state.account_provider === ''){error('Account Provider can not be Empty')}
+        else{
+            this.props.addAccount(this.state.account_id, this.state.account_name, this.state.account_type, this.state.initialBalance, this.state.account_provider)
+            this.setState({visible: false})
+        }
+    }
+
+    //  Handles delete
+    handleDelete(id){
+        this.props.deleteAccount(id)
+    }
+
+    //  Onchage for normal Input and Dropdown Input
+    onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+    onDropDownChange = (e) => this.setState({ account_type: e });
 
     render() {
         return (
@@ -26,50 +91,35 @@ export class BankAccount extends Component {
                     <Button type="primary" style={{ float: 'right' , marginRight: '100px'}} onClick={()=>this.setState({visible: true})}>Add a Account</Button>
                 </div>
               </div>
+              {/* Content */}
               <div>
                 <Row>
-                    <Col span={5} style={{ padding: '10px' }}>
-                        <AccountComponent />                    
-                    </Col>
-                    <Col span={5} style={{ padding: '10px' }}>
-                        <AccountComponent />                    
-                    </Col>
-                    <Col span={5} style={{ padding: '10px' }}>
-                        <AccountComponent />                    
-                    </Col>
-                    <Col span={5} style={{ padding: '10px' }}>
-                        <AccountComponent />                    
-                    </Col>
-                    <Col span={5} style={{ padding: '10px' }}>
-                        <AccountComponent />                    
-                    </Col>
-                    <Col span={5} style={{ padding: '10px' }}>
-                        <AccountComponent />                    
-                    </Col>
-                    <Col span={5} style={{ padding: '10px' }}>
-                        <AccountComponent />                    
-                    </Col>
-                    <Col span={5} style={{ padding: '10px' }}>
-                        <AccountComponent />                    
-                    </Col>
+                    {this.state.account?this.state.account.map((data,i)=>{
+                        return(
+                            <Col span={5} style={{ padding: '10px' }}>
+                                <AccountComponent key={data._id} account={data} deleteAccount={this.handleDelete}/>                    
+                            </Col>
+                        )
+                    }):"No data"}
                 </Row>
                 <Modal
                     title="Add a New Account"
                     centered
                     visible={this.state.visible}
                     okText="Add Account"
-                    onOk={() => this.setState({visible: false})}
+                    onOk={() => this.handleAddAccount()}
                     onCancel={() => this.setState({visible: false})}
                     width={500}
                 >
-                    <Input placeholder="Account Name" name="account_name" style={{ margin: '10px' }}></Input>
-                    <Select style={{ width: '100%',margin: '10px' }} placeholder="Account Type">
-                        <Select.Option value="cash_account">Cash Account</Select.Option>
-                        <Select.Option value="bank_account">Bank Account</Select.Option>
-                        <Select.Option value="wallet_account">Wallet Account</Select.Option>
+                    <Input placeholder="Account Number" name="account_id" style={{ margin: '10px' }} value={this.state.account_id} onChange={this.onChange}></Input>
+                    <Input placeholder="Account Name" name="account_name" style={{ margin: '10px' }} value={this.state.account_name} onChange={this.onChange}></Input>
+                    <Select name="account_type" style={{ width: '100%',margin: '10px' }} value={this.state.account_type} placeholder="Account Type" onSelect={(val,eve)=>this.onDropDownChange(val)}>
+                        <Select.Option name="account_type" value="cash_account">Cash Account</Select.Option>
+                        <Select.Option name="account_type" value="bank_account">Bank Account</Select.Option>
+                        <Select.Option  name="account_type" value="wallet_account">Wallet Account</Select.Option>
                     </Select>                    
-                    <Input placeholder="Initial Balance" name="account_name" type="number" prefix={<i className="mdi mdi-cash" style={{ color: 'grey' }}></i>} style={{ margin: '10px' }}></Input>
-                    <Input placeholder="Provider eg. Indian Bank, Paytm" name="account_name" style={{ margin: '10px' }}></Input>
+                    <Input placeholder="Initial Balance" value={this.state.initialBalance} name="initialBalance" type="number" onChange={this.onChange} prefix={<i className="mdi mdi-cash" style={{ color: 'grey' }}></i>} style={{ margin: '10px' }}></Input>
+                    <Input placeholder="Provider eg. Indian Bank, Paytm" value={this.state.account_provider} name="account_provider" onChange={this.onChange} style={{ margin: '10px' }}></Input>
                 </Modal>
               </div>
           </div>
@@ -78,4 +128,11 @@ export class BankAccount extends Component {
   
 }
 
-export default  BankAccount;
+const mapStateToProps = (state) => ({
+    isLoading: state.auth.isLoading,
+    account: state.account.account,
+    error: state.account.error
+  });
+  
+
+export default connect(mapStateToProps,{loadAccount,addAccount,deleteAccount})(BankAccount);
