@@ -32,7 +32,7 @@ module.exports = {
             //  Save account to database
             account.save((err,done)=>{
                 if (err) return res.status(500).json({ "error": err })
-                return res.status(200).json({'account':done})
+                return res.status(200).json({'accounts':done})
             })   
         }catch(err){
             return res.status(400).json({ "error": err })
@@ -62,7 +62,7 @@ module.exports = {
         //  Deleting Account
         Account.findOneAndDelete({_id: id}, (err,data)=>{
             if (err) return res.status(400).json({ "error": err })
-            return res.status(200).json({'msg':"Successfull"})
+            return res.status(200).json({'msg':"Successfull", 'accounts':data})
         })
     },
 
@@ -86,7 +86,7 @@ module.exports = {
         //  Updating Account details
         Account.findOneAndUpdate({_id: id},{$set:{account_name: account_name, account_type: account_type, account_provider: account_provider}},{new: true},(err,done)=>{
             if (err) return res.status(500).json({ "error": err })
-            res.status(200).json({'msg':'Successfull','user':done})
+            res.status(200).json({'msg':'Successfull','accounts':done})
         })
     }
 }

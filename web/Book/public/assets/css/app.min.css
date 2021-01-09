@@ -4421,6 +4421,21 @@ pre[class*="language-"] {
 	font-size:10px;
 	color:#9ba7ca
 }
+.contact-icon_hover i {
+	border:1px solid red;
+	border-radius:50%;
+	padding:6px;
+	font-size:10px;
+	color:#9ba7ca
+}
+.contact-icon_edit_hover i {
+	border:1px solid blue;
+	border-radius:50%;
+	padding:6px;
+	font-size:10px;
+	color:#9ba7ca
+}
+
 .bg-black {
 	background-color:#000 !important;
 	color:#fff
