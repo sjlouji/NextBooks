@@ -4,7 +4,7 @@ import { renderRoutes } from 'react-router-config';
 import { GiHamburgerMenu } from "react-icons/gi";
 import { connect } from 'react-redux';
 import { logout, loadUser } from '../../Store/Action/auth';
-import { HomeFilled } from '@ant-design/icons';
+import { HomeFilled, BankFilled } from '@ant-design/icons';
 
 export class Dashboard extends Component {
 
@@ -73,7 +73,10 @@ export class Dashboard extends Component {
                     <ul className="metismenu left-sidenav-menu">
                         <li className="menu-label mt-0" style={{ textAlign: 'center' }}>Main</li>
                         <li style={this.props.history.location.pathname==="/books/dashboard" || this.props.history.location.pathname==="/" ?{ backgroundColor: '#e9efff',width: '100%', padding: '20px' }:{ width: '100%', padding: '20px' }}>
-                            <a onClick={()=>this.handleNav('/books/dashboard')}> <HomeFilled style={{ fontSize: '23px' }}/></a>
+                            <a onClick={()=>this.handleNav('/books/dashboard')}> <HomeFilled style={this.props.history.location.pathname==="/books/dashboard" || this.props.history.location.pathname==="/"?{ fontSize: '23px', color: '#4285f4' }:{ fontSize: '23px' }}/></a>
+                        </li>
+                        <li style={this.props.history.location.pathname==="/books/accounts" ?{ backgroundColor: '#e9efff',width: '100%', padding: '20px' }:{ width: '100%', padding: '20px' }}>
+                            <a onClick={()=>this.handleNav('/books/accounts')}> <BankFilled style={this.props.history.location.pathname==="/books/accounts"?{ fontSize: '23px', color: '#4285f4' }:{ fontSize: '23px' }}/></a>
                         </li>
                     </ul>
                 </div>
