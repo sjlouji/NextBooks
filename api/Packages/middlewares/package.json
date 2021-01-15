@@ -1,0 +1,14 @@
+{
+  "name": "books-middlewares",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "keywords": [],
+  "author": "S. Joan Louji",
+  "license": "ISC",
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0"
+  }
+}

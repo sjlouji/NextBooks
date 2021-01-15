@@ -7,6 +7,7 @@ var {resetSuccess} = require('../../middleware/mail/resetSuccess')
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 require('../../../config/passport')
+const envConfig = require('books-config')
 
 //  Generate Auth Token
 let genToken = user => {
@@ -15,7 +16,7 @@ let genToken = user => {
         sub: user.id,
         iat: new Date().getTime(),
         exp: new Date().setDate(new Date().getDate() + 1)
-    }, process.env.JWT_SECRET);
+    }, envConfig.JWT_SECRET.authToken);
 }
 
 //  Generate Password Reset Tokens
@@ -25,7 +26,7 @@ let genPasswordResetToken = user => {
         sub: user.id,
         iat: new Date().getTime(),
         exp: Math.floor(Date.now() / 1000) + (60*2)
-    }, process.env.JWT_SECRET);
+    }, envConfig.JWT_SECRET.resetToken);
 }
 
 module.exports = {
