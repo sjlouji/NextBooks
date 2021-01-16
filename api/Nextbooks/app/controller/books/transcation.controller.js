@@ -76,7 +76,6 @@ module.exports = {
 
         //  Validating if Accound exists             
         const validateAccount = await Account.findOne({account_id: validate.account.account_id, user: req.user._id})
-        console.log(validate)
         if(!validateAccount) return res.status(404).json({"error":"Account does Not Exists"})
         
         if(validate.debit === true) {
@@ -114,7 +113,6 @@ module.exports = {
         const validateAccount = await Account.findOne({account_id: account, user: req.user._id})
         if(!validateAccount) return res.status(404).json({"error":"Account does Not Exists"})
 
-        console.log(validate.amount)
         //  Save transcation to database
         if(debit === true) { 
             let data = parseInt(validateAccount.initialBalance) - parseInt(validate.amount)

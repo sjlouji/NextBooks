@@ -1,8 +1,9 @@
 {
     "environment": "development",
     "port": {
-        "SSO_PORT": "8002",
-        "BOOKS_PORT": "8000"
+        "BOOKS_PORT": "8000",
+        "BOOKS_ADMIN": "8001",
+        "SSO_PORT": "8002"
     },
     "mongo": {
         "BOOKSDATABASEURL": "mongodb://localhost/db_books_development",

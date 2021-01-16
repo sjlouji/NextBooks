@@ -1,11 +1,13 @@
 const passport = require('passport')
 const passportJWT = require("passport-jwt");
 const JWTStrategy   = passportJWT.Strategy;
-const ExtractJWT = passportJWT.ExtractJwt;const User = require('../app/models/books/user.model')
+const ExtractJWT = passportJWT.ExtractJwt;
+const User = require('../app/models/books/user.model')
+const envConfig = require('books-config')
 
 passport.use(new JWTStrategy({
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-  secretOrKey   : process.env.JWT_SECRET
+  secretOrKey   : envConfig.JWT_SECRET.authToken
 },
  function (jwtPayload, done) {
    return User.findById(jwtPayload.sub)
