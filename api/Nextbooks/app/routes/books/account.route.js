@@ -7,7 +7,7 @@ const { accountValidation } = require('../../middleware/validators/accountValida
 
 router.get('/',passport.authenticate('jwt',{ session: false }),isActive,account.listAccounts)
 router.post('/create',passport.authenticate('jwt',{ session: false }),isActive,account.createAccount)
-router.post('/delete',passport.authenticate('jwt',{ session: false }),isActive,account.deleteAccount)
+// router.post('/delete',passport.authenticate('jwt',{ session: false }),isActive,account.deleteAccount)
 router.post('/update',passport.authenticate('jwt',{ session: false }),isActive,account.updateAccount)
 
 module.exports = router;

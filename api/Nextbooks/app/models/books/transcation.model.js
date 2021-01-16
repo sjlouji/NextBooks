@@ -30,6 +30,7 @@ var transcationSchema = new mongoose.Schema({
     account: {
         type: mongoose.Types.ObjectId,
         required: true,
+        ref: "Account"
     },
     transcation_type: {
         type: String,

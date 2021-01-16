@@ -53,6 +53,11 @@ const routes = [
           component: lazy(()=> import('./Books/Dashboard/Profile/Profile'))
         },
         {
+          path: '/books/transcation',
+          exact: true,
+          component: lazy(()=> import('./Books/Dashboard/Transcation/Transcation'))
+        },
+        {
           exact: true,
           component: () => <FileNotFound />
         }

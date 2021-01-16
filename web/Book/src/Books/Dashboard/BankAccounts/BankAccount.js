@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import AccountComponent from './Component/AccountComponent'
 import { Row, Col, Modal, Input, Button, Select, message } from 'antd';
 import { connect } from 'react-redux';
-import { loadAccount, addAccount, deleteAccount } from '../../../Store/Action/account'
+import { loadAccount, addAccount } from '../../../Store/Action/account'
 
 // Success Messge Box
 const success = () => {
@@ -29,7 +29,6 @@ export class BankAccount extends Component {
     //  Constructor
     constructor(props){
         super(props)
-        this.handleDelete = this.handleDelete.bind(this)
     }
 
     //  Fired when the component gets loaded
@@ -64,11 +63,6 @@ export class BankAccount extends Component {
         }
     }
 
-    //  Handles delete
-    handleDelete(id){
-        this.props.deleteAccount(id)
-    }
-
     //  Onchage for normal Input and Dropdown Input
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
     onDropDownChange = (e) => this.setState({ account_type: e });
@@ -94,13 +88,19 @@ export class BankAccount extends Component {
               {/* Content */}
               <div>
                 <Row>
-                    {this.state.account?this.state.account.map((data,i)=>{
-                        return(
-                            <Col span={5} style={{ padding: '10px' }}>
-                                <AccountComponent key={data._id} account={data} deleteAccount={this.handleDelete}/>                    
-                            </Col>
-                        )
-                    }):"No data"}
+                    {this.state.account ? this.state.account.length === 0?
+                        <div style={{ display: 'flex', position: 'absolute', right: '0', left: '0' }}>
+                            <img  src="https://firebasestorage.googleapis.com/v0/b/nextbooks-1a9f0.appspot.com/o/images%2FNo%20data-pana.png?alt=media&token=cb5cea24-210c-48cd-bc65-8875b00fb5b8" style={{ width: '30%', height: '50%', margin: 'auto' }} alt="user_photo"></img>
+                        </div>
+                    :
+                        this.state.account?this.state.account.map((data,i)=>{
+                            return(
+                                <Col span={5} style={{ padding: '10px' }}>
+                                    <AccountComponent key={data._id} account={data}/>                    
+                                </Col>
+                            )
+                        }):"No data"
+                    :""}
                 </Row>
                 <Modal
                     title="Add a New Account"
@@ -135,4 +135,4 @@ const mapStateToProps = (state) => ({
   });
   
 
-export default connect(mapStateToProps,{loadAccount,addAccount,deleteAccount})(BankAccount);
+export default connect(mapStateToProps,{loadAccount,addAccount})(BankAccount);

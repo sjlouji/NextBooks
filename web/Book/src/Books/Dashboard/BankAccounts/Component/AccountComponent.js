@@ -85,7 +85,14 @@ export class AccountComponent extends Component {
                         <div className="col">
                             <div className="media">
                                 <div className="media-body ml-3 align-self-center">
-                                    <h5 className="mt-0 mb-1">{this.props.account?this.props.account.account_name:""}</h5> 
+                                    <div className="row">
+                                        <div className="col">
+                                        <h5 className="mt-0 mb-1">{this.props.account?this.props.account.account_name:""}</h5> 
+                                        </div>
+                                        <div className="col">
+                                            <h6 className="mt-0">{this.props.account?this.props.account.initialBalance:""}</h6>
+                                        </div>
+                                    </div>
                                     <p className="mb-0 text-muted">{this.getAccountName(this.props.account?this.props.account.account_type:"")}</p>
                                 </div>
                             </div>
@@ -100,11 +107,6 @@ export class AccountComponent extends Component {
                                 <Tooltip title="Edit Account">
                                     <li className="list-inline-item" onClick={()=>this.setState({visible: true})} onMouseEnter={()=>this.setState({editHover: true})} onMouseLeave={()=>this.setState({editHover: false})}> 
                                         <a href="#" className={this.state.editHover?'mr-1 contact-icon_edit_hover':'mr-1 contact-icon'}><i className="mdi mdi-circle-edit-outline" style={this.state.editHover?{ color: 'blue' }:{color: ''}}></i></a>
-                                    </li>
-                                </Tooltip>
-                                <Tooltip title="Delete Account">
-                                    <li className="list-inline-item" onClick={()=>{this.props.deleteAccount(this.props.account._id)}} onMouseEnter={()=>this.setState({deleteHover: true})} onMouseLeave={()=>this.setState({deleteHover: false})}>
-                                        <a href="#" className={this.state.deleteHover?'mr-1 contact-icon_hover':'mr-1 contact-icon'}><i className="mdi mdi-trash-can-outline" style={this.state.deleteHover?{ color: 'red' }:{color: ''}}></i></a>
                                     </li>
                                 </Tooltip>
                             </ul>

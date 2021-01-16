@@ -3,7 +3,6 @@ import {
     ACCOUNTS_LOADED,
     ACCOUNTS_LOADING,
     ACCOUNT_CREATED,
-    ACCOUNT_DELETED,
     ACCOUNT_UPDATED,
     ACCOUNT_ERROR
 } from './types';
@@ -44,29 +43,6 @@ export const addAccount = (account_id, account_name, account_type, initialBalanc
         console.log(res.data)
         dispatch({
           type: ACCOUNT_CREATED,
-          payload: res.data,
-        });
-      })
-      .catch((err) => {
-        dispatch({ 
-            type: ACCOUNT_ERROR,
-            payload: err
-        })
-      });
-};
-
-//  Delete a Account
-export const deleteAccount = (id) => (dispatch, getState) => {
-
-    // Request Body
-    const body = JSON.stringify({ id });
-    console.log(body)
-    api
-      .post(`/account/delete`, body ,tokenConfig(getState))
-      .then((res) => {
-        console.log(res.data)
-        dispatch({
-          type: ACCOUNT_DELETED,
           payload: res.data,
         });
       })

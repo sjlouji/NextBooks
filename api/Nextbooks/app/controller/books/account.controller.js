@@ -1,6 +1,7 @@
 const { valid } = require('@hapi/joi');
 const { accountValidation, updateAccount } = require('../../middleware/validators/accountValidation')
 const Account = require('../../models/books/account.model');
+const Transcation = require('../../models/books/transcation.model');
 const User = require('../../models/books/user.model');
 
 
@@ -42,7 +43,7 @@ module.exports = {
 
     //  List All the Accounts of owned by the User  
     listAccounts: async function(req,res){
-        Account.find({user: req.user._id},function(err,done){
+        Account.find({user: req.user._id}).exec(function(err,done){
             if (err) return res.status(400).json({ "error": err })
             return res.status(200).json({"accounts":done})
         })

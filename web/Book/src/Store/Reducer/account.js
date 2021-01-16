@@ -1,7 +1,6 @@
 import {
     ACCOUNTS_LOADED,
     ACCOUNT_CREATED,
-    ACCOUNT_DELETED,
     ACCOUNT_UPDATED,
     ACCOUNT_ERROR
   } from '../Action/types';
@@ -25,11 +24,6 @@ import {
             isLoading: false,
             account: state.account.concat(action.payload.accounts)
         }
-      case ACCOUNT_DELETED:
-          return{
-              isLoading: false,
-              account: state.account.filter(data => data._id !== action.payload.accounts._id)
-          }
       case ACCOUNT_UPDATED:
           return {
                 isLoading: false,
