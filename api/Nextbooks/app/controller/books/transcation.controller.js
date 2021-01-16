@@ -39,10 +39,10 @@ module.exports = {
             }
 
             Account.findOneAndUpdate({user: req.user._id,account_id: account},{initialBalance: bal}, (err,acc)=>{
-                transcation.save((err,done)=>{
-                    if (err) return res.status(500).json({ "error": err })
-                    transcation.populate('account', function(err,book){
-                        if (err) return res.status(500).json({ "error": err })
+                transcation.save((errors,done)=>{
+                    if (errors) return res.status(500).json({ "error": errors })
+                    transcation.populate('account', function(er,book){
+                        if (er) return res.status(500).json({ "error": er })
                         return res.status(200).json({'transcations':book})
                     })
                 })  
@@ -86,8 +86,8 @@ module.exports = {
         
         //  Deleting Account
         Account.findOneAndUpdate({user: req.user._id,account_id: validate.account.account_id},{initialBalance: bal}, (err,acc)=>{
-            Transcation.findOneAndDelete({_id: id}, (err,data)=>{
-                if (err) return res.status(400).json({ "error": err })
+            Transcation.findOneAndDelete({_id: id}, (error,data)=>{
+                if (error) return res.status(400).json({ "error": error })
                 return res.status(200).json({'msg':"Successfull", 'transcations':data})
             })
         })
@@ -132,8 +132,8 @@ module.exports = {
         //  Updating Transcation details
         Account.findOneAndUpdate({user: req.user._id,account_id: account},{initialBalance: bal}, (err,acc)=>{
             if (err) return res.status(500).json({ "error": err })
-            Transcation.findOneAndUpdate({_id: id},{$set:{debit: debit, description: description, category: category, account: validateAccount._id, transcation_type: transcation_type, amount: amount}},{new: true},(err,done)=>{
-                if (err) return res.status(500).json({ "error": err })
+            Transcation.findOneAndUpdate({_id: id},{$set:{debit: debit, description: description, category: category, account: validateAccount._id, transcation_type: transcation_type, amount: amount}},{new: true},(errors,done)=>{
+                if (errors) return res.status(500).json({ "error": error })
                 res.status(200).json({'msg':'Successfull','transcations':done})
             }).populate('account')
         })

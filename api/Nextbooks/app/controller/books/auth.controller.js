@@ -194,11 +194,11 @@ module.exports = {
             jwt.verify(resetLink, process.env.JWT_SECRET, function(err,data){
                 if(err) return res.status(401).json({'error':'Invalid Token. Token is valid only for 2 mins.  You URL might have expired.  Try to get a new URL again.'})
                 //  Identifies, to whom the JWT token belongs
-                User.findOne({password_reset_token:resetLink},(err,user)=>{
-                    if(err || !user) return res.status(500).json({"error":"User does not exist"})
+                User.findOne({password_reset_token:resetLink},(errors,user)=>{
+                    if(errors || !user) return res.status(500).json({"error":"User does not exist"})
                     //  Updates Password
-                    User.update({_id: user._id},doc, function(err,us){
-                        if(err ) return res.status(500).json({"error":"Reset Password Error"})
+                    User.update({_id: user._id},doc, function(er,us){
+                        if(er) return res.status(500).json({"error":"Reset Password Error"})
                         resetSuccess(user.first_name, user.email)
                         return res.status(200).json({"msg":"Password Changed"})
                     })
