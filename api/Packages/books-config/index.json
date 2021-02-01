@@ -1,0 +1,18 @@
+{
+    "environment": "development",
+    "port": {
+        "BOOKS_PORT": "8000",
+        "BOOKS_ADMIN": "8001",
+        "SSO_PORT": "8002"
+    },
+    "mongo": {
+        "BOOKSDATABASEURL": "mongodb://localhost/db_books_development",
+        "SSODATABASEURL": "mongodb://localhost/db_sso_development"
+    },
+    "SENDGRIDKEY": "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",
+    "JWT_SECRET": {
+        "authToken": "helloworldthisisjoanloujideveloperofnextbooks",
+        "resetToken": "helloworldthisisjoanloujideveloperofnextbooks"
+    },
+    "CLIENT_URL": "http://localhost:3000"
+}

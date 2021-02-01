@@ -43,9 +43,19 @@ const routes = [
           component: lazy(() => import('./Books/Dashboard/Home/Home'))
         },
         {
+          path: '/books/accounts',
+          exact: true,
+          component: lazy(() => import('./Books/Dashboard/BankAccounts/BankAccount'))
+        },
+        {
           path: '/books/profile',
           exact: true,
           component: lazy(()=> import('./Books/Dashboard/Profile/Profile'))
+        },
+        {
+          path: '/books/transcation',
+          exact: true,
+          component: lazy(()=> import('./Books/Dashboard/Transcation/Transcation'))
         },
         {
           exact: true,
